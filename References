@@ -1,0 +1,58 @@
+!pip install torch
+
+import torch
+import matplotlib.pyplot as plt'
+import numpy as np
+import yfinance as yf
+import pandas as pd
+
+sample_rate = 1000
+duration = 5.0
+base_frequency = 10.0
+modulation_freq = 1
+modulation_index = 5
+second_freq = 5
+third_freq = 2
+
+
+t = torch.arange(0, duration, 1/sample_rate)
+
+frequency_modulatoin = base_freq + modulation_index * torch.sin
+
+waveform = torch.sin(2 * np.pi * frequency_modulation * t) \
+          + torch.sin(2 * np.pi * second_freq * t) \
+          + torch.sin(2 * np.pi * third_freq * t)
+
+t_np = t.numpy()
+waveform_np = waveform.numpy()
+
+plt.figure(figsize=(12, 6))
+plt.plot(t_np, waveform_np)
+plt.title('Composite Sinusoidal Waveform with Frequency Modulation and Additional Frequencies')
+plt.xlabel('Time [s]')
+plt.ylabel('Amplitude')
+plt.grid(True)
+plt.show()
+
+def fetch_financial_data(ticker, start_date, end_date):
+  data = yf.download(ticker, start=start_date, end=end_date)
+  return data
+
+ticker = 'AAPL'
+start_date = '2023-01-01'
+end_date = '2024-01-01'
+
+financial_data = fetch_financial_data(ticker, start_date, end_date)
+
+output_file = 'financial_data.csv'
+financial_data.to_csv(output_file)
+
+print(f'Financial data saved to {output_file}')
+
+def block_incoming_traffic():
+  print("Simulating blocking incoming traffic...")
+  import time
+  time.sleep(2)
+  print("Incoming traffic blocked.")
+
+block_incoming_traffic()
